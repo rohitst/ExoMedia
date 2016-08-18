@@ -22,6 +22,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.devbrackets.android.exomedia.annotation.PlaybackStateType;
 import com.devbrackets.android.exomedia.core.exoplayer.EMExoPlayer;
 import com.devbrackets.android.exomedia.core.listener.ExoPlayerListener;
 import com.devbrackets.android.exomedia.core.video.ClearableSurface;
@@ -29,8 +30,10 @@ import com.devbrackets.android.exomedia.core.listener.Id3MetadataListener;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
+import com.devbrackets.android.exomedia.listener.OnPlaybackStateChangeListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.listener.OnSeekCompletionListener;
+import com.devbrackets.android.exomedia.type.PlaybackState;
 import com.google.android.exoplayer.ExoPlayer;
 import com.google.android.exoplayer.metadata.id3.Id3Frame;
 
@@ -64,6 +67,8 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
     private OnErrorListener errorListener;
     @Nullable
     private Id3MetadataListener id3MetadataListener;
+    @Nullable
+    private OnPlaybackStateChangeListener stateChangeListener; //todo use with MediaPlayer backing
 
     @NonNull
     private WeakReference<ClearableSurface> clearableSurfaceRef = new WeakReference<>(null);
@@ -83,6 +88,8 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        notifyStateChange(PlaybackState.ENDED);
+
         if (completionListener != null) {
             completionListener.onCompletion();
         }
@@ -90,6 +97,7 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        notifyStateChange(PlaybackState.ENDED);
         return notifyErrorListener();
     }
 
@@ -114,6 +122,11 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
 
     @Override
     public void onStateChanged(boolean playWhenReady, int playbackState) {
+        //Informs the state listener of the new state
+        // NOTE: because the states are represented by the same value, we don't map the ExoPlayer states to ours
+        notifyStateChange(playbackState);
+
+        //Makes sure the ended and prepared listeners are notified
         if (playbackState == ExoPlayer.STATE_ENDED) {
             muxNotifier.onMediaPlaybackEnded();
 
@@ -236,6 +249,15 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
     }
 
     /**
+     * Sets the listener to inform of playback state changes
+     *
+     * @param listener The listener to inform
+     */
+    public void setOnPlaybackStateChangeListener(@Nullable OnPlaybackStateChangeListener listener) {
+        stateChangeListener = listener;
+    }
+
+    /**
      * Sets weather the listener was notified when we became prepared.
      *
      * @param wasNotified True if the onPreparedListener was already notified
@@ -262,6 +284,12 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
      */
     public void setNotifiedCompleted(boolean wasNotified) {
         notifiedCompleted = wasNotified;
+    }
+
+    protected void notifyStateChange(@PlaybackStateType int state) {
+        if (stateChangeListener != null) {
+            stateChangeListener.onPlaybackStateChange(state);
+        }
     }
 
     private boolean notifyErrorListener() {

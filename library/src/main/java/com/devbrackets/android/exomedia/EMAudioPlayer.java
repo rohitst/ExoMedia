@@ -33,6 +33,7 @@ import com.devbrackets.android.exomedia.core.listener.Id3MetadataListener;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
+import com.devbrackets.android.exomedia.listener.OnPlaybackStateChangeListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.listener.OnSeekCompletionListener;
 import com.devbrackets.android.exomedia.util.DeviceUtil;
@@ -361,6 +362,15 @@ public class EMAudioPlayer {
      */
     public void setOnErrorListener(OnErrorListener listener) {
         listenerMux.setOnErrorListener(listener);
+    }
+
+    /**
+     * Sets the listener to inform of playback state changes
+     *
+     * @param listener The listener
+     */
+    public void setOnPlaybackStateChangeListener(OnPlaybackStateChangeListener listener) {
+        listenerMux.setOnPlaybackStateChangeListener(listener);
     }
 
     /**

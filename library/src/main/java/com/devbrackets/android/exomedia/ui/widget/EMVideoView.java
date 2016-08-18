@@ -51,6 +51,7 @@ import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
+import com.devbrackets.android.exomedia.listener.OnPlaybackStateChangeListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.listener.OnSeekCompletionListener;
 import com.devbrackets.android.exomedia.util.DeviceUtil;
@@ -649,6 +650,17 @@ public class EMVideoView extends RelativeLayout {
     public void setId3MetadataListener(@Nullable Id3MetadataListener listener) {
         listenerMux.setId3MetadataListener(listener);
     }
+
+    /**
+     * Sets the listener to inform of playback state changes
+     *
+     * @param listener The listener
+     */
+    public void setOnPlaybackStateChangeListener(OnPlaybackStateChangeListener listener) {
+        listenerMux.setOnPlaybackStateChangeListener(listener);
+    }
+
+    //todo method to get the current state? (also in AudioPlayer)
 
     /**
      * Performs the functionality to setup the initial properties including
