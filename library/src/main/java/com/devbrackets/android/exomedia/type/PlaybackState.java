@@ -16,41 +16,67 @@
 
 package com.devbrackets.android.exomedia.type;
 
-import com.google.android.exoplayer.ExoPlayer;
-
 /**
  * States associated with the current media playback
  * state for the {@link com.devbrackets.android.exomedia.EMAudioPlayer}
  * and {@link com.devbrackets.android.exomedia.ui.widget.EMVideoView}
  *
- * TODO finish documentation, we may also want playing, paused states, error vs completion
- *      see https://developer.android.com/reference/android/media/MediaPlayer.html#State_Diagram
- *
- *      IDLE
- *      RELEASED (after release())
- *      ERROR
- *      COMPLETED
- *      PREPARING
- *      PREPARED
- *      PLAYING
- *      STOPPED
- *      PAUSED
+ * TODO: layout a diagram of states and cleanup/finish documentation
  */
 public interface PlaybackState {
     /**
-     * Media has neither been prepared or is preparing
+     * The player has not been initialized with a media uri or previously prepared.
      */
-    int IDLE = ExoPlayer.STATE_IDLE;
+    int IDLE = 1;
 
     /**
-     * The media is being prepared for playback
+     * The media uri specified is currently being prepared for playback
      */
-    int PREPARING = ExoPlayer.STATE_PREPARING;
+    int PREPARING = 2;
 
     /**
-     * The media has been prepared but isn't currently playing
+     * The media needs to buffer before playback can resume
      */
-    int READY = ExoPlayer.STATE_READY;
-    int BUFFERING = ExoPlayer.STATE_BUFFERING;
-    int ENDED = ExoPlayer.STATE_ENDED;
+    int BUFFERING = 3;
+
+    /**
+     * The media is currently seeking to the requested position
+     */
+    int SEEKING = 4;
+
+    /**
+     * The media is ready for playback. This can occur after {@link #BUFFERING}
+     * if playback wasn't requested
+     */
+    int READY = 5;
+
+    /**
+     * The media is currently in playing
+     */
+    int PLAYING = 6;
+
+    /**
+     * The media playback was paused
+     */
+    int PAUSED = 7;
+
+    /**
+     * The playback completed normally (i.e. played through completion)
+     */
+    int COMPLETED = 8;
+
+    /**
+     * The playback was stopped
+     */
+    int STOPPED = 9;
+
+    /**
+     * The player has been released and can no longer be reused (todo is this true)
+     */
+    int RELEASED = 10;
+
+    /**
+     * There was an error during playback
+     */
+    int ERROR = 11;
 }

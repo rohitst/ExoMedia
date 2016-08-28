@@ -19,8 +19,15 @@ package com.devbrackets.android.exomedia.listener;
 import com.devbrackets.android.exomedia.annotation.PlaybackStateType;
 
 /**
- * todo document
+ * Interface definition for a callback to be invoked when the playback
+ * state of the {@link com.devbrackets.android.exomedia.ui.widget.EMVideoView} or
+ * {@link com.devbrackets.android.exomedia.EMAudioPlayer} changes
  */
 public interface OnPlaybackStateChangeListener {
+    /**
+     * Called when the playback state has changed with one of the value
+     * from {@link com.devbrackets.android.exomedia.type.PlaybackState}
+     * @param state The value representing the new playback state
+     */
     void onPlaybackStateChange(@PlaybackStateType int state);
 }
