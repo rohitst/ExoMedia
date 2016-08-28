@@ -27,8 +27,14 @@ import java.lang.annotation.RetentionPolicy;
         PlaybackState.IDLE,
         PlaybackState.PREPARING,
         PlaybackState.BUFFERING,
+        PlaybackState.SEEKING,
         PlaybackState.READY,
-        PlaybackState.ENDED
+        PlaybackState.PLAYING,
+        PlaybackState.PAUSED,
+        PlaybackState.COMPLETED,
+        PlaybackState.STOPPED,
+        PlaybackState.RELEASED,
+        PlaybackState.ERROR
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface PlaybackStateType {
