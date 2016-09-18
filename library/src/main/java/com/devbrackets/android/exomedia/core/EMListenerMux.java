@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.devbrackets.android.exomedia.annotation.ExoPlayerState;
 import com.devbrackets.android.exomedia.annotation.PlaybackStateType;
 import com.devbrackets.android.exomedia.core.exoplayer.EMExoPlayer;
 import com.devbrackets.android.exomedia.core.listener.ExoPlayerListener;
@@ -119,7 +120,7 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
     }
 
     @Override
-    public void onStateChanged(boolean playWhenReady, int playbackState) {
+    public void onStateChanged(boolean playWhenReady, @ExoPlayerState int playbackState) {
         notifyStateChange(playbackState); //todo the mapping is no longer valid
 
         //Makes sure the ended and prepared listeners are notified
