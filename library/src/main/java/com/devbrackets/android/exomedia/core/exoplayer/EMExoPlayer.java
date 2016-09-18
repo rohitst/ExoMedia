@@ -32,6 +32,7 @@ import android.support.v4.util.ArrayMap;
 import android.util.Log;
 import android.view.Surface;
 
+import com.devbrackets.android.exomedia.annotation.ExoPlayerState;
 import com.devbrackets.android.exomedia.annotation.TrackRenderType;
 import com.devbrackets.android.exomedia.core.builder.RenderBuilder;
 import com.devbrackets.android.exomedia.core.listener.CaptionListener;
@@ -398,11 +399,13 @@ public class EMExoPlayer implements
         stayAwake(false);
     }
 
+    @ExoPlayerState
     public int getPlaybackState() {
         if (rendererBuildingState == RenderBuildingState.BUILDING) {
             return ExoPlayer.STATE_PREPARING;
         }
 
+        //noinspection WrongConstant (correct, just not annotated)
         return player.getPlaybackState();
     }
 
