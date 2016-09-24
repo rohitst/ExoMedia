@@ -18,6 +18,7 @@ package com.devbrackets.android.exomedia.core;
 
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -26,6 +27,7 @@ import com.devbrackets.android.exomedia.annotation.PlaybackStateType;
 import com.devbrackets.android.exomedia.core.exoplayer.EMExoPlayer;
 import com.devbrackets.android.exomedia.core.listener.ExoPlayerListener;
 import com.devbrackets.android.exomedia.core.video.ClearableSurface;
+import com.devbrackets.android.exomedia.core.listener.Id3MetadataListener;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
@@ -34,8 +36,10 @@ import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.listener.OnSeekCompletionListener;
 import com.devbrackets.android.exomedia.type.PlaybackState;
 import com.google.android.exoplayer.ExoPlayer;
+import com.google.android.exoplayer.metadata.id3.Id3Frame;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * An internal Listener that implements the listeners for the {@link EMExoPlayer},
@@ -43,7 +47,7 @@ import java.lang.ref.WeakReference;
  * error listeners.
  */
 public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener,
-        MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnSeekCompleteListener {
+        MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnSeekCompleteListener, OnBufferUpdateListener, Id3MetadataListener {
     //The amount of time the current position can be off the duration to call the onCompletion listener
     private static final long COMPLETED_DURATION_LEEWAY = 1000;
 
@@ -64,6 +68,8 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
     private OnErrorListener errorListener;
     @Nullable
     private OnPlaybackStateChangeListener stateChangeListener; //todo use correctly
+    @Nullable
+    private Id3MetadataListener id3MetadataListener;
 
     @NonNull
     private WeakReference<ClearableSurface> clearableSurfaceRef = new WeakReference<>(null);
@@ -78,11 +84,7 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
 
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        muxNotifier.onBufferUpdated(percent);
-
-        if (bufferUpdateListener != null) {
-            bufferUpdateListener.onBufferingUpdate(percent);
-        }
+        onBufferingUpdate(percent);
     }
 
     @Override
@@ -160,6 +162,22 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
     }
 
     @Override
+    public void onBufferingUpdate(@IntRange(from = 0, to = 100) int percent) {
+        muxNotifier.onBufferUpdated(percent);
+
+        if (bufferUpdateListener != null) {
+            bufferUpdateListener.onBufferingUpdate(percent);
+        }
+    }
+
+    @Override
+    public void onId3Metadata(List<Id3Frame> metadata) {
+        if (id3MetadataListener != null) {
+            id3MetadataListener.onId3Metadata(metadata);
+        }
+    }
+
+    @Override
     public void onVideoSizeChanged(int width, int height, int unAppliedRotationDegrees, float pixelWidthHeightRatio) {
         muxNotifier.onVideoSizeChanged(width, height, unAppliedRotationDegrees, pixelWidthHeightRatio);
     }
@@ -227,6 +245,15 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
      */
     public void setOnPlaybackStateChangeListener(@Nullable OnPlaybackStateChangeListener listener) {
         stateChangeListener = listener;
+    }
+
+    /**
+     * Sets the listener to inform of ID3 metadata updates
+     *
+     * @param listener The listener to inform
+     */
+    public void setId3MetadataListener(@Nullable Id3MetadataListener listener) {
+        id3MetadataListener = listener;
     }
 
     /**

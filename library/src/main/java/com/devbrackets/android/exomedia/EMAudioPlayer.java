@@ -29,6 +29,7 @@ import com.devbrackets.android.exomedia.core.audio.ExoMediaPlayer;
 import com.devbrackets.android.exomedia.core.audio.NativeMediaPlayer;
 import com.devbrackets.android.exomedia.core.builder.RenderBuilder;
 import com.devbrackets.android.exomedia.core.exoplayer.EMExoPlayer;
+import com.devbrackets.android.exomedia.core.listener.Id3MetadataListener;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
@@ -68,6 +69,15 @@ public class EMAudioPlayer {
             mediaPlayerImpl = new NativeMediaPlayer(context);
         }
 
+        init(mediaPlayerImpl);
+    }
+
+    public EMAudioPlayer(MediaPlayerApi mediaPlayerImpl) {
+        this.mediaPlayerImpl = mediaPlayerImpl;
+        init(mediaPlayerImpl);
+    }
+
+    protected void init(MediaPlayerApi mediaPlayerImpl) {
         listenerMux = new EMListenerMux(new MuxNotifier());
         mediaPlayerImpl.setListenerMux(listenerMux);
     }
@@ -360,6 +370,15 @@ public class EMAudioPlayer {
      */
     public void setOnPlaybackStateChangeListener(OnPlaybackStateChangeListener listener) {
         listenerMux.setOnPlaybackStateChangeListener(listener);
+    }
+
+    /**
+     * Sets the listener to inform of ID3 metadata updates
+     *
+     * @param listener The listener to inform
+     */
+    public void setId3MetadataListener(@Nullable Id3MetadataListener listener) {
+        listenerMux.setId3MetadataListener(listener);
     }
 
     /**

@@ -45,6 +45,7 @@ import com.devbrackets.android.exomedia.core.builder.RenderBuilder;
 import com.devbrackets.android.exomedia.core.exoplayer.EMExoPlayer;
 import com.devbrackets.android.exomedia.core.video.exo.ExoTextureVideoView;
 import com.devbrackets.android.exomedia.core.video.mp.NativeTextureVideoView;
+import com.devbrackets.android.exomedia.core.listener.Id3MetadataListener;
 import com.devbrackets.android.exomedia.core.video.scale.ScaleType;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
 import com.devbrackets.android.exomedia.listener.OnCompletionListener;
@@ -627,6 +628,15 @@ public class EMVideoView extends RelativeLayout {
     }
 
     //todo method to get the current state? (also in AudioPlayer)
+
+    /**
+     * Sets the listener to inform of ID3 metadata updates
+     *
+     * @param listener The listener to inform
+     */
+    public void setId3MetadataListener(@Nullable Id3MetadataListener listener) {
+        listenerMux.setId3MetadataListener(listener);
+    }
 
     /**
      * Performs the functionality to setup the initial properties including
