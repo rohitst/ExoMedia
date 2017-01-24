@@ -643,6 +643,17 @@ public class EMVideoView extends RelativeLayout {
     }
 
     /**
+     * Sets the listener to inform of playback state changes
+     *
+     * @param listener The listener
+     */
+    public void setOnPlaybackStateChangeListener(OnPlaybackStateChangeListener listener) {
+        listenerMux.setOnPlaybackStateChangeListener(listener);
+    }
+
+    //todo method to get the current state? (also in AudioPlayer)
+
+    /**
      * Sets the listener to inform of ID3 metadata updates
      *
      * @param listener The listener to inform

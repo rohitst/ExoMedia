@@ -67,6 +67,8 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
     @Nullable
     private OnErrorListener errorListener;
     @Nullable
+    private OnPlaybackStateChangeListener stateChangeListener; //todo use correctly
+    @Nullable
     private Id3MetadataListener id3MetadataListener;
     @Nullable
     private OnPlaybackStateChangeListener stateChangeListener; //todo use with MediaPlayer backing
@@ -236,6 +238,15 @@ public class EMListenerMux implements ExoPlayerListener, MediaPlayer.OnPreparedL
      */
     public void setOnErrorListener(@Nullable OnErrorListener listener) {
         errorListener = listener;
+    }
+
+    /**
+     * Sets the listener to inform of playback state changes
+     *
+     * @param listener The listener to inform
+     */
+    public void setOnPlaybackStateChangeListener(@Nullable OnPlaybackStateChangeListener listener) {
+        stateChangeListener = listener;
     }
 
     /**
