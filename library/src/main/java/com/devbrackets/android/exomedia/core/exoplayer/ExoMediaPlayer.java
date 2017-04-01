@@ -41,6 +41,7 @@ import com.devbrackets.android.exomedia.core.listener.MetadataListener;
 import com.devbrackets.android.exomedia.core.renderer.RendererProvider;
 import com.devbrackets.android.exomedia.core.source.MediaSourceProvider;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
+import com.devbrackets.android.exomedia.listener.VideoSizeChangeListener;
 import com.devbrackets.android.exomedia.util.Repeater;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -128,6 +129,9 @@ public class ExoMediaPlayer implements ExoPlayer.EventListener {
 
     @Nullable
     private PowerManager.WakeLock wakeLock = null;
+
+    @Nullable
+    private VideoSizeChangeListener videoSizeChangeListener;
 
     @NonNull
     private CapabilitiesListener capabilitiesListener = new CapabilitiesListener();
@@ -219,6 +223,10 @@ public class ExoMediaPlayer implements ExoPlayer.EventListener {
         if (listener != null) {
             listeners.remove(listener);
         }
+    }
+
+    public void setVideoSizeChangeListener(@SuppressWarnings("NullableProblems") VideoSizeChangeListener listener) {
+        videoSizeChangeListener = listener;
     }
 
     public void setBufferUpdateListener(@Nullable OnBufferUpdateListener listener) {
@@ -746,6 +754,9 @@ public class ExoMediaPlayer implements ExoPlayer.EventListener {
 
         @Override
         public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+            if (videoSizeChangeListener != null) {
+                videoSizeChangeListener.onVideoSizeChange(width, height);
+            }
             for (ExoPlayerListener listener : listeners) {
                 listener.onVideoSizeChanged(width, height, unappliedRotationDegrees, pixelWidthHeightRatio);
             }

@@ -30,6 +30,7 @@ import com.devbrackets.android.exomedia.core.exoplayer.ExoMediaPlayer;
 import com.devbrackets.android.exomedia.core.listener.MetadataListener;
 import com.devbrackets.android.exomedia.core.video.ClearableSurface;
 import com.devbrackets.android.exomedia.listener.OnBufferUpdateListener;
+import com.devbrackets.android.exomedia.listener.VideoSizeChangeListener;
 import com.google.android.exoplayer2.drm.MediaDrmCallback;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -190,6 +191,10 @@ public class ExoVideoDelegate {
 
     public void onSurfaceDestroyed() {
         exoMediaPlayer.blockingClearSurface();
+    }
+
+    public void setVideoSizeChangeListener(VideoSizeChangeListener listener) {
+        exoMediaPlayer.setVideoSizeChangeListener(listener);
     }
 
     protected void setup() {

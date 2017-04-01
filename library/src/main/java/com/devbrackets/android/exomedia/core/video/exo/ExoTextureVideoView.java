@@ -31,6 +31,7 @@ import com.devbrackets.android.exomedia.ExoMedia;
 import com.devbrackets.android.exomedia.core.ListenerMux;
 import com.devbrackets.android.exomedia.core.api.VideoViewApi;
 import com.devbrackets.android.exomedia.core.video.ResizingTextureView;
+import com.devbrackets.android.exomedia.listener.VideoSizeChangeListener;
 import com.google.android.exoplayer2.drm.MediaDrmCallback;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -171,6 +172,10 @@ public class ExoTextureVideoView extends ResizingTextureView implements VideoVie
         if (updateVideoSize(width, height)) {
             requestLayout();
         }
+    }
+
+    public void setVideoSizeChangeListener(VideoSizeChangeListener listener) {
+        delegate.setVideoSizeChangeListener(listener);
     }
 
     protected void setup() {

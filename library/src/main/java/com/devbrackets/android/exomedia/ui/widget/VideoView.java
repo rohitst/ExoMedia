@@ -52,6 +52,7 @@ import com.devbrackets.android.exomedia.listener.OnCompletionListener;
 import com.devbrackets.android.exomedia.listener.OnErrorListener;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.devbrackets.android.exomedia.listener.OnSeekCompletionListener;
+import com.devbrackets.android.exomedia.listener.VideoSizeChangeListener;
 import com.devbrackets.android.exomedia.util.DeviceUtil;
 import com.devbrackets.android.exomedia.util.StopWatch;
 import com.google.android.exoplayer2.drm.MediaDrmCallback;
@@ -657,6 +658,18 @@ public class VideoView extends RelativeLayout {
      */
     public void setId3MetadataListener(@Nullable MetadataListener listener) {
         listenerMux.setMetadataListener(listener);
+    }
+
+    public void setVideoSizeChangeListener(VideoSizeChangeListener listener) {
+        if (videoViewImpl instanceof ExoTextureVideoView) {
+            ((ExoTextureVideoView) videoViewImpl).setVideoSizeChangeListener(listener);
+        } else {
+            throw new UnsupportedOperationException("Only TextureView is supported");
+        }
+    }
+
+    public VideoViewApi videoViewApi() {
+        return videoViewImpl;
     }
 
     /**
