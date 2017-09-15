@@ -554,7 +554,8 @@ public class ExoMediaPlayer extends Player.DefaultEventListener {
         try {
             return new DefaultDrmSessionManager<>(uuid, FrameworkMediaDrm.newInstance(uuid), new DelegatedMediaDrmCallback(), null, mainHandler, capabilitiesListener);
         } catch (Exception e) {
-            Log.d(TAG, "Unable to create a DrmSessionManager due to an exception", e);
+            Log.d(TAG, "Unable to create a DrmSessionManager due to an exception");
+            Log.d(TAG, e.getMessage());
             return null;
         }
     }
